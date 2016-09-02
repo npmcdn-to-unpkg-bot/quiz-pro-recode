@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
-    
   },
   "keywords": [
     "quiz",
@@ -17,9 +16,19 @@
   "author": "zdping",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
     "css-loader": "^0.24.0",
     "file-loader": "^0.9.0",
     "imagemin-webpack-plugin": "^1.0.8",
+    "jquery": "^3.1.0",
+    "json-loader": "^0.5.4",
+    "jsx-loader": "^0.13.2",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-hot-loader": "^1.3.0",
     "url-loader": "^0.5.7",
     "zepto": "^1.2.0"
   }

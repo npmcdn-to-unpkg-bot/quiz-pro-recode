@@ -5,9 +5,8 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var ImageminPlugin = require('imagemin-webpack-plugin').default;
 module.exports = {
 	entry:{
-		bundle1:'./js/common.js',
-		bundle2:'./js/Question.js',
-		bundle3:'./js/load.js'
+		
+		bundle2:'./build/test.js'
 	},
 	output:{
 		path:path.resolve(__dirname,'build'),
@@ -16,19 +15,19 @@ module.exports = {
 	module:{
 		loaders:[
 			{test:/\.css$/,loader:'style-loader!css-loader'},
-			{test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+			{test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'},
+			{test: /\.(js|jsx)$/,loader: 'react-hot!babel-loader'},
+			{test:/\.json$/,loader:'json-loader'},
+			{test:/\.js[x]?$/,loader:'jsx-loader'}
 		]
 	},
-	"scripts": {
-    	"build": "webpack",
-    	"dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
-  	},
+	
   	plugins: [
-	    new webpack.optimize.UglifyJsPlugin({
-	     compress: {
-	       warnings: false
-	     }
-   		}),
+	    // new webpack.optimize.UglifyJsPlugin({
+	    //  compress: {
+	    //    warnings: false
+	    //  }
+   		// }),
     	// new CommonsChunkPlugin('init.js'),
     	new ImageminPlugin({
 	      disable: false,

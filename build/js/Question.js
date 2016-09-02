@@ -1,26 +1,14 @@
-
-var $ = require('./zepto.js');
-
-
-
-/**
- * 创建一个测验类
- * @param {[type]} info [description]
- */
-
+var $ = require('jquery');
+var Common = require('./Common.js');
+var commonObj = new Common();
 function Quiz(info){
-	
-}
-/*添加原型方法*/
-Quiz.prototype = {
-
 	/**
 	 * 创建测验方法
 	 * @param  {[object]} info         [测验对象]
 	 * @return quizArrToString         [返回测试题串]
 	 */
-	generateQuiz:function(info){
-		
+	 var _this = this;
+	 this.generateQuiz = function(){
 		var questionArray = info.question; //测验题数组
 		var questionNumbers = questionArray.length;	//测验题数组长度
 		var quizArrToString;//存放测验题所有信息数组字符串
@@ -31,6 +19,7 @@ Quiz.prototype = {
 		for(var i = 0;i<questionNumbers;i++){
 			var liNumber = i+1;
 			var choiceImgUrl; // 选项图标
+			var is_show_desc_img;
 			var questionType = questionArray[i].type; //每个题目类型
 			var optionArray = questionArray[i].option || [{"option_id":"1","option_name":"是","answer_true_false":true},{"option_id":"2","option_name":"否","answer_true_false":false}];//每个测验题的选项数组		
 			var image_240_url = questionArray[i].image_240_url;		
@@ -64,7 +53,8 @@ Quiz.prototype = {
 					}else{
 						is_show_option_img = 'yes';
 					}
-					quizArr.push('<li class="choice" onclick="choiceSelected(\''+questionType+'\',this)" option_id ="'+optionArray[j].option_id+'"><img src="'+choiceImgUrl+'"/><span>'+optionArray[j].option_name+'</span></li><img src="'+optionImgUrl+'" style="margin-bottom:10px;margin-top:10px;"class="'+is_show_option_img+'"/>');												
+					quizArr.push('<li class="choice" type ="'+questionType+'"option_id ="'+optionArray[j].option_id+'"><img src="'+choiceImgUrl+'"/><span>'+optionArray[j].option_name+'</span></li><img src="'+optionImgUrl+'" style="margin-bottom:10px;margin-top:10px;"class="'+is_show_option_img+'"/>');												
+					
 				}
 			}else{
 				for(var j = 0;j<optionArray.length;j++){
@@ -74,32 +64,32 @@ Quiz.prototype = {
 					}else{
 						is_show_option_img = 'yes';
 					}
-					quizArr.push('<li class="choice" onclick="choiceSelected(\''+questionType+'\',this)" answer_true_false = "'+optionArray[j].answer_true_false +'"><img src="'+choiceImgUrl+'"/><span>'+optionArray[j].option_name+'</span></li><img src="'+optionImgUrl+'" style="margin-bottom:10px;margin-top:10px;"class="'+is_show_option_img+'"/>');									
+					quizArr.push('<li class="choice" type="'+questionType+'"answer_true_false = "'+optionArray[j].answer_true_false +'"><img src="'+choiceImgUrl+'"/><span>'+optionArray[j].option_name+'</span></li><img src="'+optionImgUrl+'" style="margin-bottom:10px;margin-top:10px;"class="'+is_show_option_img+'"/>');									
+					
 				}
 			}
 			//为每个测验题塞入闭合标签
 			quizArr.push('</ul></div></div></div>');
+			
 		}
 		//最后向测验题所有信息数组中塞入提交按钮并塞入到指定的div中
-		var submit = this.submit;
-		
-		quizArr.push('<a class="button submit" onclick="submit()" >提交</a>','<a class="button close">关闭</a>');
+		quizArr.push('<a class="button submit">提交</a>','<a class="button close">关闭</a>');
 		quizArrToString = quizArr.join('');
 		return quizArrToString;
-	},
+	};
 	
 	/**
 	 * [测验类提交方法]
 	 * @return null
 	 */
-	submit:function(){	
-		
+	this.submit = function(){	
 		// 获取到所有的测验题
 		var questions = document.getElementsByClassName('question-basic');	
 		// 收集用户的选择的选项ID数组	
 		var user_answer_question = [];	
 		// 通过循环每个题获取每个已选择题目的option_id
 		has_more = true;
+		var item_id = parseInt(window.location.href.match(/=[0-9]{1,}/g)[0].replace(/=/,''));
 		for(var i=0,j=questions.length;i<j;i++){	
 			var questionType = questions[i].getAttribute('type'); //每道测验题类型
 			var is_answered = questions[i].getAttribute('class'); // 每道测验题目状态
@@ -130,7 +120,7 @@ Quiz.prototype = {
 		//通过JSON.stringify()函数将json对象转为json字符串，再向后台submit接口提交
 		user_answer_option_string = JSON.stringify({user_answer:user_answer_question});
 		
-		$.post('../api/discover/submit_quiz.json',{item_id:item_id,answer:user_answer_option_string},function(res){
+		$.post('../../api/discover/submit_quiz.json',{item_id:item_id,answer:user_answer_option_string},function(res){
 			
 			// 如果提交成功
 			if(res.result == 'SUCC'){
@@ -141,7 +131,7 @@ Quiz.prototype = {
 				// 设置body滚动条位置置顶
 				document.body.scrollTop='0px';
 				// 请求测验结果列表接口
-				$.post('../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5},function(res){					
+				$.post('../../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5},function(res){					
 					//测验结果数组，存放测验列表页所有信息
 					var quizResult = [];
 					// 测验结果图片url
@@ -168,24 +158,24 @@ Quiz.prototype = {
 						var user_answer_string = JSON.stringify(user_answer);
 						var is_pass = resultList[i].is_pass;
 						if(is_pass){
-							quizResult.push('<li class="item" onclick="openQuizResult(this);" user_answer_string='+user_answer_string+' item_id="'+item_id+'"><div class="test-pic"><img src="./img/bedge1.png"/></div><div class="test-desc"><h1>考试题目</h1><p>'+timeFormat(quiz_time)+'</p></div><div class="test-tongji"><span class="pass-question-count-pass">'+question_right_count+'</span><span class="total-question-count">/'+question_total_count+'</span></div></li>');	
+							quizResult.push('<li class="item"  user_answer_string='+user_answer_string+' item_id="'+item_id+'"><div class="test-pic"><img src="./img/bedge1.png"/></div><div class="test-desc"><h1>考题</h1><p>'+commonObj.timeFormat(quiz_time)+'</p></div><div class="test-tongji"><span class="pass-question-count-pass">'+question_right_count+'</span><span class="total-question-count">/'+question_total_count+'</span></div></li>');	
 						}else{
-							quizResult.push('<li class="item" onclick="openQuizResult(this);" user_answer_string='+user_answer_string+' item_id="'+item_id+'"><div class="test-pic"><img src="./img/bedge1.png"/></div><div class="test-desc"><h1>考试题目</h1><p>'+timeFormat(quiz_time)+'</p></div><div class="test-tongji"><span class="pass-question-count-nopass">'+question_right_count+'</span><span class="total-question-count">/'+question_total_count+'</span></div></li>');	
+							quizResult.push('<li class="item"  user_answer_string='+user_answer_string+' item_id="'+item_id+'"><div class="test-pic"><img src="./img/bedge1.png"/></div><div class="test-desc"><h1>考题</h1><p>'+commonObj.timeFormat(quiz_time)+'</p></div><div class="test-tongji"><span class="pass-question-count-nopass">'+question_right_count+'</span><span class="total-question-count">/'+question_total_count+'</span></div></li>');	
 						}		
 					}
-					quizResult.push('</ul></div><a class="try-again" onclick="quizAgain()">再去挑战一次</a>');	
+					quizResult.push('</ul></div><a class="try-again" onclick="'+commonObj.openQuizResult+';">再去挑战一次</a>');	
 					
 					document.getElementById('show-result-lists').innerHTML = quizResult.join('');	
 					
 					document.getElementById("show-result-lists").onscroll = function(){
 						if(has_more && document.getElementById("show-result-lists").scrollTop+document.getElementById("show-result-lists").clientHeight+10>=document.getElementById('show-result-lists').scrollHeight){			
 						 	if(offset_index2 == ''){//第一次加载
-						 		loadMore('../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5,offset_index:offset_index});						
+						 		commonObj.loadMore('../../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5,offset_index:offset_index});						
 						 	}else{// 第二次之后的加载
 						 		// 请求之前判断是否已经请求过了，即判断offset_index 和上次请求的offset_index是否相同	
 						 		if(offset_index_arr.length>=2){
 						 			if(offset_index_arr[offset_index_arr.length-1]!=offset_index_arr[offset_index_arr.length-2]){
-						 				loadMore('../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5,offset_index:offset_index2});
+						 				commonObj.loadMore('../../api/discover/get_quiz_user_result_list.json',{item_id:item_id,size:5,offset_index:offset_index2});
 						 			}			 		
 						 		}
 						 	}
@@ -195,5 +185,19 @@ Quiz.prototype = {
 				},"json");
 			}
 		},'json');	
-	}
+		
+		$.post('../../api/discover/get_quiz.json',{item_id:item_id},function(res){
+			//实例化一个测验类
+			var quiz = new Quiz(res.quiz[0]);
+			var questionWrap = quiz.generateQuiz(res.quiz[0]);
+			document.getElementById('question-wrap').innerHTML = questionWrap;
+			$(".choice").on('click',commonObj.choiceSelected,false);
+			$(".submit").on('click',quiz.submit);//提交添加一次就够了
+			document.getElementsByClassName('close')[0].style.display = 'none';
+		},"json");
+		
+	};
+	
+	
 }
+module.exports = Quiz;
