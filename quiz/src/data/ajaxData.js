@@ -1,0 +1,20 @@
+{
+	"result_array":
+		[
+			{
+				"quiz_id":1,
+				"result_id":1,
+				"quiz_time":1467944788,
+				"user_answer_array":[
+					{"question_id":1,"answer_option_id":"1","is_right":true},
+					{"question_id":2,"answer_option_id":"5,7","is_right":false},
+					{"question_id":3,"answer_true_false":true,"is_right":true}
+				],
+				"question_total_count":3,
+				"pass_question_count":2,
+				"is_pass":false
+			}
+		],
+	"has_more":false,
+	"offset_index":"CAEQnJK3oCUYASABKNSe_LsFMgYIARABIAEyCAgCEAUQByAAMgYIAxgBIAE\u003d"
+}

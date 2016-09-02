@@ -1,0 +1,95 @@
+/* Base Application Styles */
+*{
+  padding:0;
+  margin:0;
+}
+
+body {
+  color: #000;
+  background: #fff; 
+}
+
+.index img {
+  margin: 40px auto;
+  border-radius: 4px;
+  background: #fff;
+  display: block;
+}
+
+.index .notice {
+  margin: 20px auto;
+  padding: 15px 0;
+  text-align: center;
+  border: 1px solid #000;
+  border-width: 1px 0;
+  background: #666;
+}
+/*主要存储区*/
+.main-area{
+  padding-top:15px;
+  padding-left:15px;
+  box-sizing:border-box;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+/*问题区*/
+.question-basic{
+  margin-top:10px;
+  
+}
+/*标题区*/
+.question-title{
+  font-size:16px;
+  font-color:#333;
+}
+
+/*描述区*/
+.content{
+  margin-top:15px;
+  width:100%;
+}
+.desc{
+  width:100%;
+  
+
+}
+.desc img{
+  width:80%;
+}
+/*选项区*/
+.choices-choice{
+  margin-top:15px;
+}
+.choices-choice li{
+  list-style: none;
+  margin-top:15px;
+}
+.choices-choice li img{
+  height:25px;
+  height:25px;
+}
+.choices-choice li span{
+  display:inline-block;
+  height:25px;
+  line-height:25px;
+  vertical-align:top;
+  margin-left:8px;
+  font-size:14px;
+}
+
+
+/*提交区*/
+.submit{
+  background-color: #0095f1;
+  border-radius: 50px;
+  display:inline-block;
+  height:55px;
+  width:55px;
+  text-align:center;
+  line-height: 50px;
+  color:#fff;
+}
+.submit-area{
+  text-align:center;
+}
+
